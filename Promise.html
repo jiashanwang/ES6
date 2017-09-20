@@ -1,0 +1,59 @@
+﻿<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="zn-cn">
+
+<head>
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <meta>
+    <title>promise.html</title>
+    <script src="lib/jquery-1.11.1.min.js"></script>
+    <script src="lib/mock-min.js"></script>
+</head>
+<body>
+    <h2>ES6 - Promise构造函数</h2>
+</body>
+<script type="text/javascript">
+   
+    $(function () {
+	//Mock 拦截请求
+        Mock.mock("index.html", { name: "fssdf", age: 23 });
+		//函数调用
+        test("GET","index.html");
+        function test(method,url) {
+            if (window.Promise) {//检查浏览器是否支持Promise
+                //创建一个promise对象    Promise 是ES6里面的一个构造函数，可以用new的方法创建一个实例，
+                var promise = new Promise(function (resolve, reject) {
+                    //在此处编写异步代码
+                    $.ajax({
+                        method: method,
+                        url: url,
+                        dataType: "json",
+                        contentType: "application/json,charset=UTF-8;",
+                        //必须调用resolve 和reject 方法，用来把异步成功或失败的数据挂到promise对象上，为下一步promise的回调做数据的铺垫
+                        success: function (data) {
+                            console.log('成功');
+                            resolve(data) //数据挂靠
+                        },      
+                        error: function (error) {
+                            console.log("失败")
+                            reject(error) //数据挂靠
+                        }
+                    });
+                });
+                promise.then(function (res) {
+                    console.log(res);
+                }, function (res) {
+                    alert("失败拉");
+                    console.log(res );
+                });
+            }else {
+				alert("sorry,你的浏览器不支持Promise 对象")
+			};
+        };
+    })
+
+</script>
+
+</html>
